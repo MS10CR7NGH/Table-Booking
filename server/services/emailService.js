@@ -57,13 +57,13 @@ export async function sendBookingConfirmationEmail(booking) {
     bookingId,
   } = booking;
 
-  const subject = `Xác nhận đặt bàn tại Aura Dining - ${date} ${time}`;
+  const subject = `Xác nhận đặt bàn tại DinnerThings - ${date} ${time}`;
   const preferenceLabel = diningPreference === 'indoor' ? 'Trong nhà' : 'Ngoài trời';
   const tableInfo = tableNumber ? `\n- Bàn: ${tableNumber}` : '';
 
   const html = `
     <h2>Xin chào ${name},</h2>
-    <p>Cảm ơn bạn đã đặt bàn tại nhà hàng Aura Dining.</p>
+    <p>Cảm ơn bạn đã đặt bàn tại nhà hàng DinnerThings.</p>
     <p>Chi tiết đặt bàn:</p>
     <ul>
       <li><strong>Ngày:</strong> ${date}</li>
@@ -75,7 +75,7 @@ export async function sendBookingConfirmationEmail(booking) {
     </ul>
     <p>Mã đặt bàn: <strong>${bookingId}</strong></p>
     <p>Chúng tôi rất mong được phục vụ bạn.</p>
-    <p>Trân trọng,<br/>Aura Dining</p>
+    <p>Trân trọng,<br/>DinnerThings</p>
   `;
 
   try {

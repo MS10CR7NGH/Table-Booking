@@ -7,7 +7,7 @@ import { Label } from './ui/label';
 import { Switch } from './ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { useAuthFetch } from '../hooks/useAuthFetch';
 
 interface Table {
@@ -188,6 +188,7 @@ export default function AdminTableManagement() {
   const totalSeats = tables.reduce((sum, t) => sum + (t.isAvailable ? t.capacity : 0), 0);
 
   return (
+    <div className="min-h-screen bg-gray-50 py-12">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-4xl mb-2">Quản lý bàn</h1>
@@ -249,7 +250,7 @@ export default function AdminTableManagement() {
 
       {/* Add Table Button */}
       <div className="mb-6">
-        <Dialog open={isDialogOpen} onOpenChange={(open) => {
+        <Dialog open={isDialogOpen} onOpenChange={(open:boolean) => {
           setIsDialogOpen(open);
           if (!open) resetForm();
         }}>
@@ -321,7 +322,7 @@ export default function AdminTableManagement() {
                 <Switch
                   id="isAvailable"
                   checked={formData.isAvailable}
-                  onCheckedChange={(checked) => setFormData({ ...formData, isAvailable: checked })}
+                  onCheckedChange={(checked:boolean) => setFormData({ ...formData, isAvailable: checked })}
                 />
               </div>
 
@@ -417,6 +418,7 @@ export default function AdminTableManagement() {
           )}
         </CardContent>
       </Card>
+    </div>
     </div>
   );
 }

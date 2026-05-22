@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Badge } from './ui/badge';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { useAuthFetch } from '../hooks/useAuthFetch';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
@@ -209,6 +209,7 @@ export default function AdminMenuManagement() {
   };
 
   return (
+    <div className="min-h-screen bg-gray-50 py-12">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-4xl mb-2">Quản lý thực đơn</h1>
@@ -289,7 +290,7 @@ export default function AdminMenuManagement() {
             Hết hàng
           </Button>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={(open) => {
+        <Dialog open={isDialogOpen} onOpenChange={(open: boolean) => {
           setIsDialogOpen(open);
           if (!open) resetForm();
         }}>
@@ -383,7 +384,7 @@ export default function AdminMenuManagement() {
                   <Switch
                     id="isVeg"
                     checked={formData.isVeg}
-                    onCheckedChange={(checked) => setFormData({ ...formData, isVeg: checked })}
+                    onCheckedChange={(checked: boolean) => setFormData({ ...formData, isVeg: checked })}
                   />
                 </div>
 
@@ -395,7 +396,7 @@ export default function AdminMenuManagement() {
                   <Switch
                     id="isChefSpecial"
                     checked={formData.isChefSpecial}
-                    onCheckedChange={(checked) => setFormData({ ...formData, isChefSpecial: checked })}
+                    onCheckedChange={(checked: boolean) => setFormData({ ...formData, isChefSpecial: checked })}
                   />
                 </div>
 
@@ -404,7 +405,7 @@ export default function AdminMenuManagement() {
                   <Switch
                     id="isAvailable"
                     checked={formData.isAvailable}
-                    onCheckedChange={(checked) => setFormData({ ...formData, isAvailable: checked })}
+                    onCheckedChange={(checked: boolean) => setFormData({ ...formData, isAvailable: checked })}
                   />
                 </div>
               </div>
@@ -540,6 +541,7 @@ export default function AdminMenuManagement() {
           </Tabs>
         </CardContent>
       </Card>
+    </div>
     </div>
   );
 }

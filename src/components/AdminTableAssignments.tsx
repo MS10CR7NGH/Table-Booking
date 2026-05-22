@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Users, Armchair, Edit2, X, Save, RefreshCw, Filter, StickyNote } from 'lucide-react';
+import { Calendar, Users, Armchair, Edit2, X, Save, RefreshCw, Filter, StickyNote, AlertCircle, CheckCircle } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
@@ -7,8 +7,9 @@ import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Badge } from './ui/badge';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { useAuthFetch } from '../hooks/useAuthFetch';
+import { motion } from 'motion/react';
 
 interface Booking {
   id: string;
@@ -31,6 +32,7 @@ interface Table {
   capacity: number;
   location: 'indoor' | 'outdoor';
   isAvailable: boolean;
+  description?: string;
 }
 
 export default function AdminTableAssignments() {
@@ -236,212 +238,289 @@ export default function AdminTableAssignments() {
   const unassignedBookings = bookings.filter(b => !b.tableId);
 
   return (
+    <div className="min-h-screen bg-gray-50 py-12"> 
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="mb-8">
-        <h1 className="text-4xl mb-2">Phân bàn</h1>
-        <p className="text-gray-600">Quản lý phân bàn cho các đặt chỗ</p>
-      </div>
-
-      {/* Controls */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="flex-1 flex flex-col gap-2">
-          <div className="flex gap-2 items-center flex-wrap">
-            <Label className="mb-0">Phạm vi</Label>
-            <div className="flex border rounded-lg overflow-hidden text-sm">
-              <Button
-                type="button"
-                variant={rangeMode === 'day' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setRangeMode('day')}
-                className={rangeMode === 'day' ? 'bg-amber-600 hover:bg-amber-700' : ''}
-              >
-                Theo ngày
-              </Button>
-              <Button
-                type="button"
-                variant={rangeMode === 'upcoming' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setRangeMode('upcoming')}
-                className={rangeMode === 'upcoming' ? 'bg-amber-600 hover:bg-amber-700' : ''}
-              >
-                Tất cả sắp tới
-              </Button>
-              <Button
-                type="button"
-                variant={rangeMode === 'range' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setRangeMode('range')}
-                className={rangeMode === 'range' ? 'bg-amber-600 hover:bg-amber-700' : ''}
-              >
-                Khoảng thời gian
-              </Button>
-            </div>
-          </div>
-
-          {rangeMode === 'day' && (
-          <Input
-            id="filterDate"
-            type="date"
-            value={filterDate}
-            onChange={(e) => setFilterDate(e.target.value)}
-          />
-          )}
-
-          {rangeMode === 'range' && (
-            <div className="flex gap-2">
-              <Input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                placeholder="Từ ngày"
-              />
-              <Input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                placeholder="Đến ngày"
-              />
-            </div>
-          )}
-        </div>
-        <div className="flex gap-3 items-end">
+      {/* Header */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="mb-8"
+      >
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-4xl font-bold text-gray-900">Phân bàn</h1>
           <Button
             onClick={fetchData}
             variant="outline"
+            size="sm"
             disabled={isLoading}
+            className="gap-2"
           >
-            <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
             Làm mới
           </Button>
-          <div className="flex border rounded-lg">
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('list')}
-              className={viewMode === 'list' ? 'bg-amber-600 hover:bg-amber-700' : ''}
-            >
-              Xem danh sách
-            </Button>
-            <Button
-              variant={viewMode === 'grid' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('grid')}
-              className={viewMode === 'grid' ? 'bg-amber-600 hover:bg-amber-700' : ''}
-            >
-              Xem lưới
-            </Button>
-          </div>
         </div>
-      </div>
+        <p className="text-gray-600">Quản lý phân bàn cho các đặt chỗ</p>
+      </motion.div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Tổng đặt bàn</CardTitle>
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
+      >
+        <Card className="border-0 shadow-md hover:shadow-lg transition-shadow bg-gradient-to-br from-blue-50 to-blue-100">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-blue-600" />
+              Tổng đặt bàn
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl">{bookings.length}</p>
+            <p className="text-3xl font-bold text-blue-600">{bookings.length}</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Đã phân bàn</CardTitle>
+        <Card className="border-0 shadow-md hover:shadow-lg transition-shadow bg-gradient-to-br from-green-50 to-green-100">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+              <Armchair className="w-4 h-4 text-green-600" />
+              Đã phân bàn
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl text-green-600">
+            <p className="text-3xl font-bold text-green-600">
               {bookings.filter(b => b.tableId).length}
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Chưa phân bàn</CardTitle>
+        <Card className="border-0 shadow-md hover:shadow-lg transition-shadow bg-gradient-to-br from-amber-50 to-amber-100">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+              <Filter className="w-4 h-4 text-amber-600" />
+              Chưa phân bàn
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl text-amber-600">
+            <p className="text-3xl font-bold text-amber-600">
               {unassignedBookings.length}
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">Tổng số khách</CardTitle>
+        <Card className="border-0 shadow-md hover:shadow-lg transition-shadow bg-gradient-to-br from-purple-50 to-purple-100">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+              <Users className="w-4 h-4 text-purple-600" />
+              Tổng số khách
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl">
+            <p className="text-3xl font-bold text-purple-600">
               {bookings.reduce((sum, b) => sum + b.guests, 0)}
             </p>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
+
+      {/* Controls */}
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8"
+      >
+        <div className="flex flex-col gap-6">
+          {/* Filter Section */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-700 mb-4">Bộ lọc</h3>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <Label className="text-xs font-medium text-gray-600 mb-2 block">Phạm vi thời gian</Label>
+                <div className="flex border rounded-lg overflow-hidden">
+                  <Button
+                    type="button"
+                    variant={rangeMode === 'day' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setRangeMode('day')}
+                    className={`flex-1 ${rangeMode === 'day' ? 'bg-amber-600 hover:bg-amber-700' : ''}`}
+                  >
+                    Theo ngày
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={rangeMode === 'upcoming' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setRangeMode('upcoming')}
+                    className={`flex-1 ${rangeMode === 'upcoming' ? 'bg-amber-600 hover:bg-amber-700' : ''}`}
+                  >
+                    Sắp tới
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={rangeMode === 'range' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setRangeMode('range')}
+                    className={`flex-1 ${rangeMode === 'range' ? 'bg-amber-600 hover:bg-amber-700' : ''}`}
+                  >
+                    Khoảng
+                  </Button>
+                </div>
+              </div>
+
+              {rangeMode === 'day' && (
+                <div className="flex-1">
+                  <Label htmlFor="filterDate" className="text-xs font-medium text-gray-600 mb-2 block">Chọn ngày</Label>
+                  <Input
+                    id="filterDate"
+                    type="date"
+                    value={filterDate}
+                    onChange={(e) => setFilterDate(e.target.value)}
+                  />
+                </div>
+              )}
+
+              {rangeMode === 'range' && (
+                <div className="flex-1 flex gap-2">
+                  <div className="flex-1">
+                    <Label className="text-xs font-medium text-gray-600 mb-2 block">Từ ngày</Label>
+                    <Input
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Label className="text-xs font-medium text-gray-600 mb-2 block">Đến ngày</Label>
+                    <Input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* View Mode */}
+          <div>
+            <Label className="text-xs font-medium text-gray-600 mb-2 block">Chế độ xem</Label>
+            <div className="flex border rounded-lg w-fit">
+              <Button
+                variant={viewMode === 'list' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('list')}
+                className={viewMode === 'list' ? 'bg-amber-600 hover:bg-amber-700' : ''}
+              >
+                Danh sách
+              </Button>
+              <Button
+                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('grid')}
+                className={viewMode === 'grid' ? 'bg-amber-600 hover:bg-amber-700' : ''}
+              >
+                Lưới
+              </Button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
 
       {isLoading ? (
-        <div className="text-center py-12 text-gray-500">Đang tải...</div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center py-16"
+        >
+          <div className="inline-block">
+            <RefreshCw className="w-8 h-8 animate-spin text-amber-600" />
+            <p className="text-gray-500 mt-2">Đang tải dữ liệu...</p>
+          </div>
+        </motion.div>
       ) : bookings.length === 0 ? (
-        <Card>
-          <CardContent className="py-12 text-center text-gray-500">
-            {rangeMode === 'day' && <>Không tìm thấy đặt bàn cho {filterDate}</>}
-            {rangeMode === 'upcoming' && <>Không tìm thấy đặt bàn sắp tới</>}
-            {rangeMode === 'range' && (startDate || endDate) && (
-              <>Không tìm thấy đặt bàn trong khoảng {startDate || '...'} đến {endDate || '...'}</>
-            )}
-            {rangeMode === 'range' && !startDate && !endDate && <>Vui lòng chọn khoảng thời gian</>}
-          </CardContent>
-        </Card>
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <Card className="border-0 shadow-sm bg-gradient-to-br from-gray-50 to-gray-100">
+            <CardContent className="py-16 text-center">
+              <Calendar className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-500 text-lg font-medium">
+                {rangeMode === 'day' && <>Không tìm thấy đặt bàn cho {filterDate}</>}
+                {rangeMode === 'upcoming' && <>Không tìm thấy đặt bàn sắp tới</>}
+                {rangeMode === 'range' && (startDate || endDate) && (
+                  <>Không tìm thấy đặt bàn trong khoảng {startDate || '...'} đến {endDate || '...'}</>
+                )}
+                {rangeMode === 'range' && !startDate && !endDate && <>Vui lòng chọn khoảng thời gian</>}
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
       ) : (
         <>
           {viewMode === 'list' ? (
             /* List View */
-            <div className="space-y-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
               {/* Unassigned Bookings */}
               {unassignedBookings.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Filter className="w-5 h-5 text-amber-600" />
-                      Đặt bàn chưa phân bàn ({unassignedBookings.length})
+                <Card className="border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 shadow-md">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-2 text-amber-900">
+                      <AlertCircle className="w-5 h-5 text-amber-600" />
+                      Cần phân bàn ({unassignedBookings.length})
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {unassignedBookings.map((booking) => (
-                        <div
+                      {unassignedBookings.map((booking, idx) => (
+                        <motion.div
                           key={booking.id}
-                          className="border-2 border-amber-200 bg-amber-50 rounded-lg p-4"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.05 }}
+                          className="border-2 border-amber-200 bg-white rounded-lg p-4 hover:shadow-md transition-shadow"
                         >
                           <div className="flex justify-between items-start">
-                            <div>
-                              <h4 className="mb-1">{booking.name}</h4>
-                              <div className="text-sm text-gray-600 space-y-1">
-                                <div>
-                                  <span className="inline-block px-2 py-0.5 mr-1 rounded-full bg-amber-50 text-amber-800 font-semibold">
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-gray-900 mb-2">{booking.name}</h4>
+                              <div className="text-sm text-gray-600 space-y-2">
+                                <div className="flex flex-wrap gap-2 items-center">
+                                  <Badge className="bg-amber-100 text-amber-800 border border-amber-300">
+                                    <Calendar className="w-3 h-3 mr-1" />
+                                    {booking.date}
+                                  </Badge>
+                                  <Badge className="bg-amber-100 text-amber-800 border border-amber-300">
                                     {booking.time}
-                                  </span>
-                                  • {booking.guests} khách • {booking.diningPreference === 'indoor' ? 'Trong nhà' : 'Ngoài trời'}
+                                  </Badge>
+                                  <Badge variant="outline">{booking.guests} khách</Badge>
                                 </div>
                                 <div>{booking.email} • {booking.phone}</div>
                                 {booking.note && (
-                                  <div className="flex items-start text-sm text-amber-800">
-                                    <StickyNote className="w-3.5 h-3.5 mr-1 mt-0.5" />
+                                  <div className="flex items-start text-sm text-amber-800 bg-amber-50 rounded p-2">
+                                    <StickyNote className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
                                     <span className="break-words">{booking.note}</span>
                                   </div>
                                 )}
                               </div>
                             </div>
                             <Button
-                              size="sm"
                               onClick={() => openAssignDialog(booking)}
-                              className="bg-amber-600 hover:bg-amber-700"
+                              className="bg-amber-600 hover:bg-amber-700 ml-4 flex-shrink-0"
                             >
                               <Armchair className="w-4 h-4 mr-2" />
                               Phân bàn
                             </Button>
                           </div>
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                   </CardContent>
@@ -449,42 +528,53 @@ export default function AdminTableAssignments() {
               )}
 
               {/* Assigned Bookings */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Bàn đã được đặt</CardTitle>
+              <Card className="border-0 shadow-md">
+                <CardHeader className="pb-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b">
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    Bàn đã được phân ({bookings.filter(b => b.tableId).length})
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-6">
                   <div className="space-y-3">
-                    {bookings.filter(b => b.tableId).map((booking) => (
-                      <div
+                    {bookings.filter(b => b.tableId).map((booking, idx) => (
+                      <motion.div
                         key={booking.id}
-                        className="border border-gray-200 rounded-lg p-4"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="border border-green-200 rounded-lg p-4 hover:shadow-md transition-shadow bg-white"
                       >
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              <h4>{booking.name}</h4>
-                              <Badge className="bg-green-600">
+                              <h4 className="font-semibold text-gray-900">{booking.name}</h4>
+                              <Badge className="bg-green-600 text-white">
                                 <Armchair className="w-3 h-3 mr-1" />
                                 Bàn {booking.tableNumber}
                               </Badge>
                             </div>
-                            <div className="text-sm text-gray-600 space-y-1">
-                              <div>{booking.date} • {booking.time} • {booking.guests} khách • {booking.diningPreference === 'indoor' ? 'Trong nhà' : 'Ngoài trời'}</div>
+                            <div className="text-sm text-gray-600 space-y-2">
+                              <div className="flex flex-wrap gap-2 items-center">
+                                <Badge variant="outline">{booking.date}</Badge>
+                                <Badge variant="outline">{booking.time}</Badge>
+                                <Badge variant="outline">{booking.guests} khách</Badge>
+                              </div>
                               <div>{booking.email} • {booking.phone}</div>
                               {booking.note && (
-                                <div className="flex items-start text-sm text-amber-800">
-                                  <StickyNote className="w-3.5 h-3.5 mr-1 mt-0.5" />
+                                <div className="flex items-start text-sm text-gray-700 bg-gray-50 rounded p-2">
+                                  <StickyNote className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
                                   <span className="break-words">{booking.note}</span>
                                 </div>
                               )}
                             </div>
                           </div>
-                          <div className="flex gap-2">
+                          <div className="flex gap-2 ml-4 flex-shrink-0">
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => openAssignDialog(booking)}
+                              className="hover:bg-amber-50"
                             >
                               <Edit2 className="w-4 h-4" />
                             </Button>
@@ -492,105 +582,114 @@ export default function AdminTableAssignments() {
                               size="sm"
                               variant="outline"
                               onClick={() => handleUnassignTable(booking.id)}
-                              className="text-red-600 hover:text-red-700"
+                              className="text-red-600 hover:text-red-700 hover:bg-red-50"
                             >
                               <X className="w-4 h-4" />
                             </Button>
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
           ) : (
-            /* Grid View - Table Layout (reuse style from AdminTableManagement) */
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-              {sortedTables.map((table) => {
+            /* Grid View */
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+            >
+              {sortedTables.map((table, idx) => {
                 const assignments = tableAssignments[table.id] || [];
                 const isOccupied = assignments.length > 0;
 
                 return (
-                  <div
+                  <motion.div
                     key={table.id}
-                    className={`border-2 rounded-lg p-4 transition-colors ${
-                      isOccupied
-                        ? 'border-green-200 bg-green-50'
-                        : 'border-gray-200 bg-gray-50'
-                    }`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.05 }}
                   >
-                    <div className="flex justify-between items-start mb-3">
-                      <div>
-                        <h3 className="text-lg">Bàn {table.tableNumber}</h3>
-                        <p className="text-sm text-gray-600">
-                          {table.capacity} chỗ • {table.location === 'indoor' ? 'Trong nhà' : 'Ngoài trời'}
-                        </p>
+                    <Card className={`h-full border-2 transition-all hover:shadow-lg ${
+                      isOccupied
+                        ? 'border-green-200 bg-gradient-to-br from-green-50 to-emerald-50'
+                        : 'border-gray-200 bg-white hover:border-gray-300'
+                    }`}>
+                      <CardHeader className="pb-3">
+                        <div className="flex justify-between items-start gap-2">
+                          <div>
+                            <CardTitle className="text-lg">Bàn {table.tableNumber}</CardTitle>
+                            <p className="text-xs text-gray-600 mt-1">
+                              {table.capacity} chỗ • {table.location === 'indoor' ? 'Trong nhà' : 'Ngoài trời'}
+                            </p>
+                          </div>
+                          <Badge className={
+                            isOccupied ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700'
+                          }>
+                            {isOccupied ? 'Có khách' : 'Trống'}
+                          </Badge>
                         </div>
-                      <div
-                        className={`px-2 py-1 rounded text-xs ${
-                          isOccupied ? 'bg-green-600 text-white' : 'bg-gray-300 text-gray-900'
-                        }`}
-                      >
-                        {isOccupied ? 'Đã có khách' : 'Có sẵn'}
-                      </div>
-                      </div>
+                      </CardHeader>
 
-                      {assignments.length > 0 ? (
-                        <div className="space-y-2">
-                          {assignments.map((booking) => (
-                          <div
-                            key={booking.id}
-                            className="bg-white/70 border border-green-200 rounded-lg p-2 text-sm text-gray-700"
-                          >
-                            <div className="font-medium text-gray-900 mb-1 truncate">
-                              {booking.name}
-                            </div>
-                            <div className="text-xs text-gray-700 mb-1">
-                              <span className="inline-block px-2 py-0.5 mr-1 rounded-full bg-amber-50 text-amber-800 font-semibold">
-                                {booking.date}
-                              </span>
-                              <span className="inline-block px-2 py-0.5 mr-1 rounded-full bg-amber-50 text-amber-800 font-semibold">
-                                {booking.time}
-                              </span>
-                              • {booking.guests} khách • {booking.diningPreference === 'indoor' ? 'Trong nhà' : 'Ngoài trời'}
-                            </div>
-                            {booking.note && (
-                              <div className="flex items-start text-xs text-amber-800 mb-1">
-                                <StickyNote className="w-3.5 h-3.5 mr-1 mt-0.5" />
-                                <span className="break-words">{booking.note}</span>
+                      <CardContent className="pt-0">
+                        {assignments.length > 0 ? (
+                          <div className="space-y-2">
+                            {assignments.map((booking) => (
+                              <div
+                                key={booking.id}
+                                className="bg-white border border-green-200 rounded-lg p-3 hover:shadow-md transition-shadow"
+                              >
+                                <div className="font-medium text-sm text-gray-900 mb-1 truncate">
+                                  {booking.name}
+                                </div>
+                                <div className="text-xs text-gray-600 space-y-1 mb-2">
+                                  <div className="flex gap-1 flex-wrap">
+                                    <Badge variant="outline" className="text-xs">{booking.time}</Badge>
+                                    <Badge variant="outline" className="text-xs">{booking.guests} khách</Badge>
+                                  </div>
+                                </div>
+                                {booking.note && (
+                                  <div className="text-xs text-amber-800 bg-amber-50 rounded p-1.5 mb-2">
+                                    <StickyNote className="w-3 h-3 inline mr-1" />
+                                    {booking.note.substring(0, 50)}...
+                                  </div>
+                                )}
+                                <div className="flex gap-1">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => openAssignDialog(booking)}
+                                    className="flex-1 h-7 text-xs"
+                                  >
+                                    Đổi
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => handleUnassignTable(booking.id)}
+                                    className="h-7 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </Button>
+                                </div>
                               </div>
-                            )}
-                            <div className="flex gap-2">
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => openAssignDialog(booking)}
-                                className="flex-1 h-8 text-xs"
-                                >
-                                Đổi
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => handleUnassignTable(booking.id)}
-                                className="h-8 text-xs text-red-600"
-                                >
-                                Xóa
-                                </Button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                      <div className="text-sm text-gray-400 text-center py-4">
-                        Không có đặt bàn
-                        </div>
-                      )}
-                  </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-center py-6 text-gray-400">
+                            <Armchair className="w-6 h-6 mx-auto mb-2 opacity-50" />
+                            <p className="text-xs">Không có đặt bàn</p>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
           )}
         </>
       )}
@@ -669,6 +768,7 @@ export default function AdminTableAssignments() {
           )}
         </DialogContent>
       </Dialog>
+    </div>
     </div>
   );
 }

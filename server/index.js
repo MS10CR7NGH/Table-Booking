@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({
-    message: 'Aura Dining API Server',
+    message: 'DinnerThings API Server',
     version: '1.0.0',
     status: 'running',
     endpoints: {
@@ -77,7 +77,7 @@ app.get('/health', (req, res) => {
 // API Info endpoint
 app.get('/api', (req, res) => {
   res.json({
-    message: 'Aura Dining API',
+    message: 'DinnerThings API',
     version: '1.0.0',
     endpoints: {
       auth: '/api/auth',

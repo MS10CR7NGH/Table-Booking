@@ -1,11 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, UtensilsCrossed } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from './components/ui/button';
 import { Toaster } from './components/ui/sonner';
 import HomePage from './components/HomePage';
 import BookingPageWithTableSelection from './components/BookingPageWithTableSelection';
 import MenuPage from './components/MenuPage';
+import ReviewPage from './components/ReviewPage';
 import AdminDashboard from './components/AdminDashboard';
 import AdminLayout from './components/AdminLayout';
 import AdminTableManagement from './components/AdminTableManagement';
@@ -21,15 +22,15 @@ function Navigation() {
   const navigate = useNavigate();
 
   return (
-    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-amber-100 fixed top-0 w-full  backdrop-blur-sm shadow-sm z-50">
+      <div className=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-800 rounded-lg flex items-center justify-center">
-              <span className="text-white">LB</span>
+          <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+            <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-700 rounded-lg flex items-center justify-center shadow-md">
+              <UtensilsCrossed className="text-white w-5 h-5" />
             </div>
-            <span className="text-gray-900">Aura Dining</span>
+            <span className="text-gray-900 font-semibold">DinnerThings</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -40,8 +41,14 @@ function Navigation() {
             <Link to="/menu" className="text-gray-700 hover:text-amber-600 transition-colors">
               Thực đơn
             </Link>
-            <Button onClick={() => navigate('/booking')} className="bg-amber-600 hover:bg-amber-700">
+            <Link to="/reviews" className="text-gray-700 hover:text-amber-600 transition-colors">
+              Đánh giá
+            </Link>
+            <Button onClick={() => navigate('/booking')} className="bg-amber-600 text-black hover:bg-amber-700  hover:text-white">
               Đặt bàn ngay
+            </Button>
+            <Button onClick={() => navigate('/admin/login')} className="bg-amber-900 hover:bg-amber-700">
+              Đăng nhập
             </Button>
           </div>
 
@@ -72,6 +79,13 @@ function Navigation() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Thực đơn
+            </Link>
+            <Link
+              to="/reviews"
+              className="block text-gray-700 hover:text-amber-600 transition-colors py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Đánh giá
             </Link>
             <Button 
               onClick={() => {
@@ -122,6 +136,15 @@ export default function App() {
             <Footer />
           </div>
         } />
+        <Route path="/reviews" element={
+          <div className="min-h-screen bg-white">
+            <Navigation />
+            <div className="pt-20">
+              <ReviewPage />
+            </div>
+            <Footer />
+          </div>
+        } />
 
         <Route path="/admin/login" element={<AdminLoginPage />} />
 
@@ -153,10 +176,10 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-800 rounded-lg flex items-center justify-center">
-                <span className="text-white">AD</span>
+              <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-800 rounded-lg flex items-center justify-center shadow-md">
+                <UtensilsCrossed className="text-white w-5 h-5" />
               </div>
-              <span>Aura Dining</span>
+              <span className="font-semibold">DinnerThings</span>
             </div>
             <p className="text-gray-400 text-sm">
               Trải nghiệm ẩm thực đẳng cấp. Nguyên liệu tươi ngon, hương vị chân thực, khoảnh khắc khó quên.
@@ -178,7 +201,7 @@ function Footer() {
               <li>15 Đ. 2 Tháng 9</li>
               <li>Hoà Cường Nam, Hải Châu, Đà Nẵng</li>
               <li>Điện thoại: (+84) 236 123 4567</li>
-              <li>Email: hello@auradining.vn</li>
+              <li>Email: DinnerThings@gmail.com</li>
             </ul>
           </div>
 
@@ -193,7 +216,7 @@ function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; 2025 Aura Dining. Bảo lưu mọi quyền.</p>
+          <p>&copy; 2025 DinnerThings. Bảo lưu mọi quyền.</p>
         </div>
       </div>
     </footer>

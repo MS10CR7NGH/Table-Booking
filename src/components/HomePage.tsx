@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { Clock, MapPin, Phone, Star } from 'lucide-react';
+import { Clock, MapPin, Phone, Star, Users, Award, Utensils, TrendingUp } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import TestimonialsSlider from './TestimonialsSlider';
+import DishSlider from './DishSlider';
 import { motion } from 'motion/react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
@@ -14,7 +15,7 @@ export default function HomePage() {
       <section className="relative h-[600px] md:h-[700px] overflow-hidden">
         <div className="absolute inset-0">
           <ImageWithFallback
-            src="https://images.unsplash.com/photo-1744776411221-702f2848b0b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjByZXN0YXVyYW50JTIwaW50ZXJpb3J8ZW58MXx8fHwxNzY0Mjg4NzkxfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+            src="https://acihome.vn/uploads/1/tuvan/mau-thiet-ke-nha-han1670557873.jpg"
             alt="Luxury restaurant interior"
             className="w-full h-full object-cover"
           />
@@ -32,17 +33,17 @@ export default function HomePage() {
               Trải Nghiệm Ẩm Thực Đẳng Cấp
             </h1>
             <p className="text-xl mb-8 text-gray-200">
-              Khám phá hương vị tinh tế, dịch vụ hoàn hảo và không gian đáng nhớ tại Aura Dining. Đặt bàn ngay hôm nay và tận hưởng hành trình ẩm thực.
+              Khám phá hương vị tinh tế, dịch vụ hoàn hảo và không gian đáng nhớ tại DinnerThings. Đặt bàn ngay hôm nay và tận hưởng hành trình ẩm thực.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button onClick={() => navigate('/booking')} size="lg" className="bg-amber-600 hover:bg-amber-700">
+              <Button onClick={() => navigate('/booking')} size="lg" className="bg-amber-600 text-black hover:bg-amber-700  hover:text-white">
                 Đặt bàn ngay
               </Button>
               <Button onClick={() => navigate('/menu')} size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm text-white border-white hover:bg-white/20">
                 Xem thực đơn
               </Button>
-              <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm text-white border-white hover:bg-white/20">
-                Đặt món online
+              <Button onClick={() => navigate('/reviews')} size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm text-white border-white hover:bg-white/20">
+                Xem đánh giá
               </Button>
             </div>
           </motion.div>
@@ -59,9 +60,9 @@ export default function HomePage() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl mb-6">Chào mừng đến Aura Dining</h2>
+              <h2 className="text-4xl mb-6">Chào mừng đến DinnerThings</h2>
               <p className="text-gray-600 mb-4">
-                Hơn 20 năm qua, Aura Dining đã phục vụ những món ăn tinh tế nhất tại trung tâm thành phố New York. Niềm đam mê với ẩm thực đặc biệt, cùng cam kết về dịch vụ xuất sắc, tạo nên trải nghiệm ẩm thực khó quên.
+                Hơn 20 năm qua, DinnerThings đã phục vụ những món ăn tinh tế nhất tại trung tâm thành phố Pháp. Niềm đam mê với ẩm thực đặc biệt, cùng cam kết về dịch vụ xuất sắc, tạo nên trải nghiệm ẩm thực khó quên.
               </p>
               <p className="text-gray-600 mb-6">
                 Đầu bếp của chúng tôi chỉ sử dụng nguyên liệu tươi ngon nhất, có nguồn gốc địa phương để chế biến những món ăn chân thực, kết hợp giữa truyền thống và sáng tạo. Dù bạn đến với chúng tôi cho bữa tối lãng mạn, bữa trưa công việc hay lễ kỷ niệm đặc biệt, chúng tôi hứa sẽ làm cho mọi khoảnh khắc đều đáng nhớ.
@@ -117,69 +118,98 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Dishes Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <DishSlider />
+        </div>
+      </section>
+
       {/* Location & Hours Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-amber-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Info */}
-            <div className="space-y-8">
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="space-y-8"
+            >
               <div>
-                <h2 className="text-4xl mb-8">Ghé thăm chúng tôi</h2>
+                <h2 className="text-4xl font-bold mb-2">Ghé thăm chúng tôi</h2>
+                <p className="text-gray-600 mb-8">Chúng tôi đang chờ đón bạn tại địa điểm tinh tế của mình</p>
                 
-                <Card className="mb-6">
+                <Card className="mb-6 border-0 shadow-md hover:shadow-lg transition-shadow bg-white/80 backdrop-blur-sm">
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4">
-                      <div className="p-3 bg-amber-100 rounded-lg">
+                      <div className="p-3 bg-gradient-to-br from-amber-100 to-orange-100 rounded-lg flex-shrink-0">
                         <MapPin className="w-6 h-6 text-amber-600" />
                       </div>
-                      <div>
-                        <h3 className="mb-2">Địa chỉ</h3>
-                        <p className="text-gray-600">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg text-gray-900 mb-2">Địa chỉ</h3>
+                        <p className="text-gray-600 leading-relaxed">
                           15 Đ. 2 Tháng 9<br />
-                          Hoà Cường Nam, Hải Châu, Đà Nẵng<br />
-                          Việt Nam
+                          Hoà Cường Nam, Hải Châu<br />
+                          Đà Nẵng, Việt Nam
                         </p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="mb-6">
+                <Card className="mb-6 border-0 shadow-md hover:shadow-lg transition-shadow bg-white/80 backdrop-blur-sm">
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4">
-                      <div className="p-3 bg-amber-100 rounded-lg">
+                      <div className="p-3 bg-gradient-to-br from-amber-100 to-orange-100 rounded-lg flex-shrink-0">
                         <Clock className="w-6 h-6 text-amber-600" />
                       </div>
-                      <div>
-                        <h3 className="mb-2">Giờ mở cửa</h3>
-                        <div className="space-y-1 text-gray-600">
-                          <p>Thứ 2 - Thứ 5: 11:00 - 22:00</p>
-                          <p>Thứ 6 - Thứ 7: 11:00 - 23:00</p>
-                          <p>Chủ nhật: 10:00 - 21:00</p>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg text-gray-900 mb-3">Giờ mở cửa</h3>
+                        <div className="space-y-2 text-gray-600">
+                          <div>
+                            <span>Thứ 2 - Thứ 5:  </span>
+                            <span className="font-medium text-amber-700">11:00 - 22:00</span>
+                          </div>
+                          <div>
+                            <span>Thứ 6 - Thứ 7:  </span>
+                            <span className="font-medium text-amber-700">11:00 - 23:00</span>
+                          </div>
+                          <div>
+                            <span>Chủ nhật:  </span>
+                            <span className="font-medium text-amber-700">10:00 - 21:00</span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="border-0 shadow-md hover:shadow-lg transition-shadow bg-white/80 backdrop-blur-sm">
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4">
-                      <div className="p-3 bg-amber-100 rounded-lg">
+                      <div className="p-3 bg-gradient-to-br from-amber-100 to-orange-100 rounded-lg flex-shrink-0">
                         <Phone className="w-6 h-6 text-amber-600" />
                       </div>
-                      <div>
-                        <h3 className="mb-2">Liên hệ</h3>
-                        <p className="text-gray-600">
-                          Điện thoại: (555) 123-4567<br />
-                          Email: hello@labella.com
-                        </p>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg text-gray-900 mb-3">Liên hệ</h3>
+                        <div className="space-y-2">
+                          <p className="text-gray-600">
+                            <span className="font-medium">Điện thoại:</span><br />
+                            <a href="tel:+84123456789" className="text-amber-700 hover:text-amber-700 transition-colors">(+84) 123 456 789</a>
+                          </p>
+                          <p className="text-gray-600">
+                            <span className="font-medium">Email:</span><br />
+                            <a href="mailto:DinnerThings@gmail.com" className="text-amber-700 hover:text-amber-700 transition-colors">DinnerThings@gmail.com</a>
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               </div>
-            </div>
+            </motion.div>
 
             {/* Map */}
             <div className="h-[600px] rounded-lg overflow-hidden shadow-lg">
@@ -202,7 +232,7 @@ export default function HomePage() {
       <section className="py-20 bg-gradient-to-r from-amber-600 to-amber-800 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl mb-6">Sẵn sàng dùng bữa với chúng tôi?</h2>
-          <p className="text-xl mb-8 text-amber-100">
+          <p className="text-xl mb-8">
             Đặt bàn ngay bây giờ và trải nghiệm ẩm thực tinh tế nhất tại New York
           </p>
           <div className="flex flex-wrap justify-center gap-4">

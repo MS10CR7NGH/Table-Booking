@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { buildApiUrl } from '../utils/api/config';
 

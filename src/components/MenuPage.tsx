@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { motion } from 'motion/react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { buildApiUrl } from '../utils/api/config';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 
 type MenuItem = {
   id: string;

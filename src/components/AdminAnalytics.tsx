@@ -3,7 +3,7 @@ import { TrendingUp, Users, Calendar, Clock, DollarSign, MapPin } from 'lucide-r
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, Legend } from 'recharts';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { useAuthFetch } from '../hooks/useAuthFetch';
 
 interface Booking {
@@ -156,6 +156,7 @@ export default function AdminAnalytics() {
   ] : [];
 
   return (
+    <div className="min-h-screen bg-gray-50 py-12">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex justify-between items-center mb-8">
         <div>
@@ -391,6 +392,7 @@ export default function AdminAnalytics() {
           </Card>
         </>
       )}
+    </div>
     </div>
   );
 }

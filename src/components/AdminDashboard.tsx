@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { useAuthFetch } from '../hooks/useAuthFetch';
 
 interface Booking {
@@ -74,7 +74,7 @@ export default function AdminDashboard() {
     ]);
 
     const csvContent = [
-      ['Nhà hàng Aura Dining - Tất cả đặt bàn'],
+      ['Nhà hàng DinnerThings - Tất cả đặt bàn'],
       ['Được tạo vào: ' + new Date().toLocaleString()],
       [''],
       headers,
@@ -130,7 +130,7 @@ export default function AdminDashboard() {
         ]);
 
         const csvContent = [
-          [`Aura Dining - Đặt bàn cho ${filterDate}`],
+          [`DinnerThings - Đặt bàn cho ${filterDate}`],
           ['Được tạo vào: ' + new Date().toLocaleString()],
           [''],
           headers,
@@ -236,7 +236,7 @@ export default function AdminDashboard() {
               <div className="flex gap-3 items-end">
                 <Button
                   onClick={downloadDateBookings}
-                  className="bg-amber-600 hover:bg-amber-700"
+                  className="bg-amber-600 text-black hover:bg-amber-700"
                   disabled={!filterDate}
                 >
                   <Download className="w-4 h-4 mr-2" />

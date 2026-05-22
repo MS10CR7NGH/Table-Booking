@@ -138,7 +138,7 @@ Frontend will run at `http://localhost:3000` (Vite automatically changes port if
 
 After running `npm run seed`, the system creates a default admin account:
 
-- **Email:** `admin@auradining.vn`
+- **Email:** `admin@dinnerthings.vn`
 - **Password:** `123456`
 
 **How to login:**

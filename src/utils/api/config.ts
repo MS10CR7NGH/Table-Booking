@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 const sanitizeBaseUrl = (url: string) => url.replace(/\/+$/, '');
 
 // Use relative path in production (same domain), absolute URL in development

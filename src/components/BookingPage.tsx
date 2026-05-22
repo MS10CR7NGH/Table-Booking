@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Textarea } from './ui/textarea';
 import { motion } from 'motion/react';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { buildApiUrl } from '../utils/api/config';
 
 export default function BookingPage() {
@@ -156,7 +156,7 @@ export default function BookingPage() {
       const dataUrl = await toPng(summary);
     const link = document.createElement('a');
       link.href = dataUrl;
-      link.download = `AuraDining_Booking_${bookingId || Date.now()}.png`;
+      link.download = `DinnerThings_Booking_${bookingId || Date.now()}.png`;
     link.click();
       toast.success('Đã tải ảnh chi tiết đặt bàn!');
     } catch (error) {
@@ -167,78 +167,102 @@ export default function BookingPage() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 py-12">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Card className="text-center" id="booking-summary">
+            <Card className="border-0 shadow-2xl overflow-hidden" id="booking-summary">
+              <div className="h-1 bg-gradient-to-r from-green-400 via-green-500 to-emerald-500"></div>
               <CardContent className="p-12">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                  className="w-20 h-20 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+                >
                   <Check className="w-10 h-10 text-green-600" />
-                </div>
-                <h1 className="text-3xl mb-4">Đặt bàn thành công!</h1>
-                <p className="text-gray-600 mb-6">
-                  Cảm ơn bạn, {name}! Bàn của bạn đã được đặt.
+                </motion.div>
+                <h1 className="text-4xl font-bold text-gray-900 mb-2">Đặt bàn thành công!</h1>
+                <p className="text-lg text-gray-600 mb-8 text-center">
+                  Cảm ơn bạn, <span className="font-semibold text-amber-600">{name}</span>! Bàn của bạn đã được đặt.
                 </p>
                 
-                <div className="bg-gray-50 rounded-lg p-6 mb-6 text-left">
-                  <h3 className="mb-4">Chi tiết đặt bàn</h3>
-                  <div className="space-y-3 text-gray-600">
-                    <div className="flex items-center">
-                      <Calendar className="w-5 h-5 mr-3 text-amber-600" />
-                      <span>{date && formatDate(date)}</span>
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-8 mb-6 border border-gray-200"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 mb-6">Chi tiết đặt bàn</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center p-3 bg-white rounded-lg">
+                      <Calendar className="w-5 h-5 mr-4 text-amber-600 flex-shrink-0" />
+                      <span className="text-gray-700 font-medium">{date && formatDate(date)}</span>
                     </div>
-                    <div className="flex items-center">
-                      <Clock className="w-5 h-5 mr-3 text-amber-600" />
-                      <span>{time}</span>
+                    <div className="flex items-center p-3 bg-white rounded-lg">
+                      <Clock className="w-5 h-5 mr-4 text-amber-600 flex-shrink-0" />
+                      <span className="text-gray-700 font-medium">{time}</span>
                     </div>
-                    <div className="flex items-center">
-                      <Users className="w-5 h-5 mr-3 text-amber-600" />
-                      <span>{guests} {parseInt(guests) === 1 ? 'Khách' : 'Khách'}</span>
+                    <div className="flex items-center p-3 bg-white rounded-lg">
+                      <Users className="w-5 h-5 mr-4 text-amber-600 flex-shrink-0" />
+                      <span className="text-gray-700 font-medium">{guests} {parseInt(guests) === 1 ? 'Khách' : 'Khách'}</span>
                     </div>
-                    <div className="flex items-center">
-                      <MapPin className="w-5 h-5 mr-3 text-amber-600" />
-                      <span>{diningPreference === 'indoor' ? 'Trong nhà' : 'Ngoài trời'}</span>
+                    <div className="flex items-center p-3 bg-white rounded-lg">
+                      <MapPin className="w-5 h-5 mr-4 text-amber-600 flex-shrink-0" />
+                      <span className="text-gray-700 font-medium">{diningPreference === 'indoor' ? 'Trong nhà' : 'Ngoài trời'}</span>
                     </div>
-                  {note && (
-                    <div className="flex items-start">
-                      <StickyNote className="w-5 h-5 mr-3 text-amber-600 mt-0.5" />
-                      <span>{note}</span>
-                    </div>
-                  )}
+                    {note && (
+                      <div className="flex items-start p-3 bg-white rounded-lg">
+                        <StickyNote className="w-5 h-5 mr-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">{note}</span>
+                      </div>
+                    )}
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
-                  <p className="text-sm text-amber-800 mb-2">
-                    Email xác nhận đã được gửi đến <strong>{email}</strong> và SMS đến <strong>{phone}</strong>
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-amber-500 rounded-lg p-6 mb-8"
+                >
+                  <p className="text-gray-700 mb-3">
+                    📧 Email xác nhận đã được gửi đến <strong className="text-amber-700">{email}</strong>
+                  </p>
+                  <p className="text-gray-700 mb-3">
+                    📱 SMS xác nhận đã được gửi đến <strong className="text-amber-700">{phone}</strong>
                   </p>
                   {bookingId && (
-                    <p className="text-xs text-amber-700">
-                      Mã đặt bàn: <strong>{bookingId}</strong>
+                    <p className="text-sm text-amber-700 pt-3 border-t border-amber-200">
+                      Mã đặt bàn: <strong className="font-mono text-lg">{bookingId}</strong>
                     </p>
                   )}
-                </div>
+                </motion.div>
 
-                <div className="flex gap-3 justify-center">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="flex flex-col sm:flex-row gap-3 justify-center"
+                >
                   <Button 
                     onClick={() => setIsSubmitted(false)}
-                    className="bg-amber-600 hover:bg-amber-700"
+                    className="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-8"
                   >
                     Đặt bàn khác
                   </Button>
                   <Button 
                     onClick={downloadImage}
                     variant="outline"
-                    className="border-amber-600 text-amber-600 hover:bg-amber-50"
+                    className="border-2 border-amber-600 text-amber-600 hover:bg-amber-50 font-semibold px-8"
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Tải về
                   </Button>
-                </div>
+                </motion.div>
               </CardContent>
             </Card>
           </motion.div>
@@ -248,251 +272,303 @@ export default function BookingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-amber-50 py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl mb-4">Đặt bàn của bạn</h1>
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">Đặt bàn của bạn</h1>
           <p className="text-xl text-gray-600">
-            Đặt bàn để trải nghiệm ẩm thực tại Aura Dining
+            Trải nghiệm ẩm thực tuyệt vời tại DinnerThings
           </p>
-        </div>
+          <div className="h-1 w-24 bg-gradient-to-r from-amber-500 to-amber-600 mx-auto mt-6 rounded-full"></div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Booking Form */}
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Chi tiết đặt bàn</CardTitle>
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-2"
+          >
+            <Card className="border-0 shadow-xl overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-amber-500 to-amber-600"></div>
+              <CardHeader className="bg-gradient-to-r from-gray-50 to-gray-100 border-b">
+                <CardTitle className="text-2xl text-gray-900">Chi tiết đặt bàn</CardTitle>
+                <p className="text-sm text-gray-600 mt-1">Hãy điền thông tin để hoàn tất việc đặt bàn</p>
               </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Date Selection */}
+              <CardContent className="p-8">
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  {/* Section 1: Ngày, giờ, khách */}
                   <div>
-                    <Label htmlFor="date" className="mb-2 block">Chọn ngày</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <button
-                          type="button"
-                          className="w-full flex items-center justify-start px-3 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 transition-colors"
-                        >
-                          <Calendar className="mr-2 h-4 w-4" />
-                          <span>{date ? formatDate(date) : 'Chọn ngày'}</span>
-                        </button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <CalendarComponent
-                          mode="single"
-                          selected={date}
-                          onSelect={setDate}
-                          disabled={(date) => {
-                            const today = new Date();
-                            today.setHours(0, 0, 0, 0);
-                            return date < today;
-                          }}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6 pb-3 border-b-2 border-amber-200">
+                      1️⃣ Chọn ngày, giờ & số khách
+                    </h3>
 
-                  {/* Time and Guests */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="time" className="mb-2 block">Chọn giờ</Label>
-                      <Select value={time} onValueChange={setTime}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Chọn giờ" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {timeSlots.map((slot) => (
-                            <SelectItem key={slot} value={slot}>
-                              {slot}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                    {/* Date Selection */}
+                    <div className="mb-6">
+                      <Label htmlFor="date" className="mb-2 block font-semibold text-gray-700">Chọn ngày</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            type="button"
+                            className="w-full flex items-center justify-start px-4 py-3 border-2 border-gray-300 rounded-lg bg-white hover:bg-gray-50 hover:border-amber-400 transition-all focus:outline-none focus:border-amber-600 focus:ring-2 focus:ring-amber-100"
+                          >
+                            <Calendar className="mr-3 h-5 w-5 text-amber-600" />
+                            <span className="text-gray-700 font-medium">{date ? formatDate(date) : 'Chọn ngày'}</span>
+                          </motion.button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 border-2 border-amber-200" align="start">
+                          <CalendarComponent
+                            mode="single"
+                            selected={date}
+                            onSelect={setDate}
+                            disabled={(date: Date) => {
+                              const today = new Date();
+                              today.setHours(0, 0, 0, 0);
+                              return date < today;
+                            }}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
                     </div>
 
-                    <div>
-                      <Label htmlFor="guests" className="mb-2 block">Số lượng khách</Label>
-                      <Select value={guests} onValueChange={setGuests}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Chọn số khách" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                            <SelectItem key={num} value={num.toString()}>
-                              {num} {num === 1 ? 'Khách' : 'Khách'}
-                            </SelectItem>
-                          ))}
-                          <SelectItem value="9+">9+ Khách (Liên hệ chúng tôi)</SelectItem>
-                        </SelectContent>
-                      </Select>
+                    {/* Time and Guests */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <Label htmlFor="time" className="mb-2 block font-semibold text-gray-700">Chọn giờ</Label>
+                        <Select value={time} onValueChange={setTime}>
+                          <SelectTrigger className="border-2 border-gray-300 hover:border-amber-400 h-12">
+                            <Clock className="w-4 h-4 mr-2 text-amber-600" />
+                            <SelectValue placeholder="Chọn giờ" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {timeSlots.map((slot) => (
+                              <SelectItem key={slot} value={slot}>
+                                {slot}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="guests" className="mb-2 block font-semibold text-gray-700">Số lượng khách</Label>
+                        <Select value={guests} onValueChange={setGuests}>
+                          <SelectTrigger className="border-2 border-gray-300 hover:border-amber-400 h-12">
+                            <Users className="w-4 h-4 mr-2 text-amber-600" />
+                            <SelectValue placeholder="Chọn số khách" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                              <SelectItem key={num} value={num.toString()}>
+                                {num} {num === 1 ? 'Khách' : 'Khách'}
+                              </SelectItem>
+                            ))}
+                            <SelectItem value="9+">9+ Khách (Liên hệ chúng tôi)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Dining Preference */}
+                  {/* Section 2: Dining Preference */}
                   <div>
-                    <Label className="mb-2 block">Sở thích chỗ ngồi</Label>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6 pb-3 border-b-2 border-amber-200">
+                      2️⃣ Sở thích chỗ ngồi
+                    </h3>
                     <div className="grid grid-cols-2 gap-4">
-                      <button
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         type="button"
                         onClick={() => setDiningPreference('indoor')}
-                        className={`p-4 border-2 rounded-lg transition-all ${
+                        className={`p-6 border-2 rounded-xl transition-all font-semibold ${
                           diningPreference === 'indoor'
-                            ? 'border-amber-600 bg-amber-50'
-                            : 'border-gray-200 hover:border-amber-300'
+                            ? 'border-amber-600 bg-gradient-to-br from-amber-50 to-orange-50 text-amber-900'
+                            : 'border-gray-300 hover:border-amber-300 text-gray-700'
                         }`}
                       >
-                        <Utensils className="w-6 h-6 mx-auto mb-2 text-amber-600" />
-                        <div className="text-sm">Trong nhà</div>
-                      </button>
-                      <button
+                        <Utensils className={`w-6 h-6 mx-auto mb-3 ${diningPreference === 'indoor' ? 'text-amber-600' : 'text-gray-400'}`} />
+                        <div className="text-base">Trong nhà</div>
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         type="button"
                         onClick={() => setDiningPreference('outdoor')}
-                        className={`p-4 border-2 rounded-lg transition-all ${
+                        className={`p-6 border-2 rounded-xl transition-all font-semibold ${
                           diningPreference === 'outdoor'
-                            ? 'border-amber-600 bg-amber-50'
-                            : 'border-gray-200 hover:border-amber-300'
+                            ? 'border-amber-600 bg-gradient-to-br from-amber-50 to-orange-50 text-amber-900'
+                            : 'border-gray-300 hover:border-amber-300 text-gray-700'
                         }`}
                       >
-                        <MapPin className="w-6 h-6 mx-auto mb-2 text-amber-600" />
-                        <div className="text-sm">Ngoài trời</div>
-                      </button>
+                        <MapPin className={`w-6 h-6 mx-auto mb-3 ${diningPreference === 'outdoor' ? 'text-amber-600' : 'text-gray-400'}`} />
+                        <div className="text-base">Ngoài trời</div>
+                      </motion.button>
                     </div>
                   </div>
 
                   {/* Availability Indicator */}
                   {availabilityStatus && (
-                    <div className={`p-4 rounded-lg ${
-                      availabilityStatus.status === 'available' ? 'bg-green-50 border border-green-200' :
-                      availabilityStatus.status === 'limited' ? 'bg-yellow-50 border border-yellow-200' :
-                      availabilityStatus.status === 'unavailable' ? 'bg-red-50 border border-red-200' :
-                      'bg-orange-50 border border-orange-200'
-                    }`}>
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`p-4 rounded-lg border-2 ${
+                        availabilityStatus.status === 'available' ? 'bg-green-50 border-green-200' :
+                        availabilityStatus.status === 'limited' ? 'bg-yellow-50 border-yellow-200' :
+                        availabilityStatus.status === 'unavailable' ? 'bg-red-50 border-red-200' :
+                        'bg-orange-50 border-orange-200'
+                      }`}>
                       <div className="flex items-center">
-                        <div className={`w-2 h-2 rounded-full mr-2 ${
+                        <div className={`w-3 h-3 rounded-full mr-3 animate-pulse ${
                           availabilityStatus.status === 'available' ? 'bg-green-500' :
                           availabilityStatus.status === 'limited' ? 'bg-yellow-500' :
                           availabilityStatus.status === 'unavailable' ? 'bg-red-500' :
                           'bg-orange-500'
                         }`}></div>
-                        <span className="text-sm">{availabilityStatus.message}</span>
+                        <span className="text-sm font-semibold">{availabilityStatus.message}</span>
                       </div>
-                    </div>
+                    </motion.div>
                   )}
 
-                  {/* Contact Information */}
-                  <div className="border-t pt-6">
-                    <h3 className="mb-4">Thông tin liên hệ</h3>
+                  {/* Section 3: Contact Information */}
+                  <div className="pt-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6 pb-3 border-b-2 border-amber-200">
+                      3️⃣ Thông tin liên hệ
+                    </h3>
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor="name">Họ và tên</Label>
+                        <Label htmlFor="name" className="font-semibold text-gray-700 mb-2 block">Họ và tên</Label>
                         <Input
                           id="name"
                           type="text"
                           placeholder="Nguyễn Văn A"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
+                          className="border-2 border-gray-300 hover:border-amber-400 h-12 text-base"
                           required
                         />
                       </div>
 
                       <div>
-                        <Label htmlFor="email">Địa chỉ email</Label>
+                        <Label htmlFor="email" className="font-semibold text-gray-700 mb-2 block">Địa chỉ email</Label>
                         <Input
                           id="email"
                           type="email"
                           placeholder="nguyenvana@example.com"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                          className="border-2 border-gray-300 hover:border-amber-400 h-12 text-base"
                           required
                         />
                       </div>
 
                       <div>
-                        <Label htmlFor="phone">Số điện thoại</Label>
+                        <Label htmlFor="phone" className="font-semibold text-gray-700 mb-2 block">Số điện thoại</Label>
                         <Input
                           id="phone"
                           type="tel"
                           placeholder="+84 123 456 789"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
+                          className="border-2 border-gray-300 hover:border-amber-400 h-12 text-base"
                           required
                         />
                       </div>
 
                       <div>
-                        <Label htmlFor="note">Ghi chú (tuỳ chọn)</Label>
+                        <Label htmlFor="note" className="font-semibold text-gray-700 mb-2 block">Ghi chú (tuỳ chọn)</Label>
                         <Textarea
                           id="note"
                           placeholder="Ví dụ: cần ghế trẻ em, dị ứng với hải sản..."
                           value={note}
                           onChange={(e) => setNote(e.target.value)}
                           rows={3}
+                          className="border-2 border-gray-300 hover:border-amber-400 text-base"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Submit Button */}
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-amber-600 hover:bg-amber-700"
-                    size="lg"
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    Xác nhận đặt bàn
-                  </Button>
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white font-bold py-3 text-lg shadow-lg"
+                      size="lg"
+                    >
+                      Xác nhận đặt bàn
+                    </Button>
+                  </motion.div>
                 </form>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
 
           {/* Sidebar Info */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Chính sách đặt bàn</CardTitle>
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="space-y-6"
+          >
+            <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-white to-gray-50">
+              <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-600"></div>
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 border-b">
+                <CardTitle className="text-lg">✓ Chính sách đặt bàn</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 text-sm text-gray-600">
+              <CardContent className="p-6 space-y-4">
                 <div>
-                  <h4 className="text-gray-900 mb-2">Hủy đặt bàn</h4>
-                  <p>Vui lòng hủy ít nhất 24 giờ trước để tránh phí hủy.</p>
+                  <h4 className="text-gray-900 font-semibold mb-2">🚫 Hủy đặt bàn</h4>
+                  <p className="text-sm text-gray-600">Vui lòng hủy ít nhất 24 giờ trước để tránh phí hủy.</p>
                 </div>
                 <div>
-                  <h4 className="text-gray-900 mb-2">Đến muộn</h4>
-                  <p>Bàn được giữ trong 15 phút sau giờ đặt. Vui lòng gọi nếu đến muộn.</p>
+                  <h4 className="text-gray-900 font-semibold mb-2">⏰ Đến muộn</h4>
+                  <p className="text-sm text-gray-600">Bàn được giữ trong 15 phút sau giờ đặt. Vui lòng gọi nếu đến muộn.</p>
                 </div>
                 <div>
-                  <h4 className="text-gray-900 mb-2">Nhóm lớn</h4>
-                  <p>Đối với nhóm 9 người trở lên, vui lòng gọi trực tiếp (555) 123-4567.</p>
+                  <h4 className="text-gray-900 font-semibold mb-2">👥 Nhóm lớn</h4>
+                  <p className="text-sm text-gray-600">Đối với nhóm 9 người trở lên, vui lòng gọi trực tiếp.</p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Cần hỗ trợ?</CardTitle>
+            <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-br from-white to-gray-50">
+              <div className="h-1 bg-gradient-to-r from-green-500 to-emerald-600"></div>
+              <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-100 border-b">
+                <CardTitle className="text-lg">💬 Cần hỗ trợ?</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3 text-sm">
+              <CardContent className="p-6 space-y-4">
                 <div>
-                  <div className="text-gray-600 mb-1">Điện thoại</div>
-                  <div className="text-gray-900">(555) 123-4567</div>
+                  <div className="text-sm text-gray-600 mb-1 font-medium">📞 Điện thoại</div>
+                  <div className="text-gray-900 font-semibold text-lg">(+84) 236 123 4567</div>
                 </div>
                 <div>
-                  <div className="text-gray-600 mb-1">Email</div>
-                  <div className="text-gray-900">reservations@labella.com</div>
+                  <div className="text-sm text-gray-600 mb-1 font-medium">✉️ Email</div>
+                  <div className="text-gray-900 font-semibold">reservations@dinnerthings.vn</div>
                 </div>
                 <div>
-                  <div className="text-gray-600 mb-1">Giờ mở cửa</div>
-                  <div className="text-gray-900">T2-T5: 11:00-22:00</div>
-                  <div className="text-gray-900">T6-T7: 11:00-23:00</div>
-                  <div className="text-gray-900">CN: 10:00-21:00</div>
+                  <div className="text-sm text-gray-600 mb-1 font-medium">🕐 Giờ mở cửa</div>
+                  <div className="text-sm text-gray-700 space-y-1">
+                    <div>T2-T5: 11:00-22:00</div>
+                    <div>T6-T7: 11:00-23:00</div>
+                    <div>CN: 10:00-21:00</div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

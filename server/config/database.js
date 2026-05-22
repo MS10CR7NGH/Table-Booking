@@ -12,7 +12,7 @@ if (process.env.VERCEL !== '1') {
   dotenv.config({ path: path.resolve(__dirname, '..', '..', '.env') });
 }
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://restaurant_db:123@table-booking.bh9ojgd.mongodb.net/restaurant_db?retryWrites=true&w=majority';
 const DATABASE_NAME = process.env.DATABASE_NAME || 'restaurant_db';
 
 let client = null;
@@ -20,7 +20,7 @@ let db = null;
 
 export async function connectDatabase() {
   try {
-    if (!MONGODB_URI || MONGODB_URI === 'mongodb://localhost:27017') {
+    if (!MONGODB_URI) {
       const error = new Error('MONGODB_URI is not configured. Please set it in environment variables.');
       console.error('❌', error.message);
       throw error;

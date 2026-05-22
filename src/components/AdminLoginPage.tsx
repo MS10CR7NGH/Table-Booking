@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { Shield, Lock } from 'lucide-react';
+import { UtensilsCrossed, Lock } from 'lucide-react';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 
 export default function AdminLoginPage() {
   const { login } = useAdminAuth();
@@ -35,12 +35,12 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center space-y-3">
-          <div className="mx-auto w-16 h-16 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center">
-            <Shield className="w-8 h-8" />
+          <div className="mx-auto w-16 h-16 bg-amber-600 text-amber-700 rounded-full flex items-center justify-center">
+            <UtensilsCrossed className="w-20 h-8 text-black" />
           </div>
-          <CardTitle className="text-2xl">Đăng nhập quản trị</CardTitle>
+          <CardTitle className="text-2xl">Đăng nhập</CardTitle>
           <p className="text-sm text-gray-500">
-            Chỉ dành cho nhân sự Aura Dining. Vui lòng giữ bí mật thông tin đăng nhập.
+            Chào mừng đến với DinnerThings.
           </p>
         </CardHeader>
         <CardContent>
@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@auradining.vn"
+                placeholder="admin@dinnerthings.vn"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -74,15 +74,15 @@ export default function AdminLoginPage() {
             </div>
             <Button
               type="submit"
-              className="w-full bg-amber-600 hover:bg-amber-700"
+              className="w-full bg-amber-600 hover:bg-amber-700 text-black"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
             </Button>
             <div className="text-center text-sm text-gray-500">
               <p>Nếu quên mật khẩu, vui lòng liên hệ quản lý hệ thống.</p>
-              <Link to="/" className="text-amber-600 hover:underline mt-2 inline-block">
-                ← Về trang chủ Aura Dining
+              <Link to="/" className="text-amber-700 hover:underline mt-2 inline-block">
+                ← Về trang chủ DinnerThings
               </Link>
             </div>
           </form>

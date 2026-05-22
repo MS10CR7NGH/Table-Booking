@@ -6,7 +6,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Separator } from './ui/separator';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { useAuthFetch } from '../hooks/useAuthFetch';
 
 interface RestaurantSettings {
@@ -41,7 +41,7 @@ const defaultHours: OperatingHours[] = [
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState<RestaurantSettings>({
-    restaurantName: 'Aura Dining',
+    restaurantName: 'DinnerThings',
     email: 'hello@auradining.vn',
     phone: '(+84) 236 123 4567',
     address: '15 Đ. 2 Tháng 9',
@@ -63,7 +63,7 @@ Chúng tôi rất mong được phục vụ bạn.
 
 Trân trọng,
 Đội ngũ {restaurantName}`,
-    smsTemplate: 'Aura Dining xin xác nhận bàn của {customerName} vào {date} lúc {time} cho {guests} khách. Hẹn gặp bạn!'
+    smsTemplate: 'DinnerThings xin xác nhận bàn của {customerName} vào {date} lúc {time} cho {guests} khách. Hẹn gặp bạn!'
   });
 
   const [hours, setHours] = useState<OperatingHours[]>(defaultHours);
@@ -126,6 +126,7 @@ Trân trọng,
   };
 
   return (
+    <div className="min-h-screen bg-gray-50 py-12">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-4xl mb-2">Cài đặt nhà hàng</h1>
@@ -360,6 +361,7 @@ Trân trọng,
           </Button>
         </div>
       </div>
+    </div>
     </div>
   );
 }
