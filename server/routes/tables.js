@@ -58,15 +58,16 @@ router.post('/', verifyAdmin, async (req, res) => {
     };
 
     const result = await db.collection('tables').insertOne(table);
-    table._id = result.insertedId;
-    table.id = result.insertedId.toString();
 
     res.json({
       success: true,
       table: {
-        id: table.id,
-        ...table,
-        _id: undefined
+        id: result.insertedId.toString(),
+        tableNumber: table.tableNumber,
+        capacity: table.capacity,
+        location: table.location,
+        isAvailable: table.isAvailable,
+        description: table.description
       }
     });
   } catch (error) {
@@ -80,14 +81,21 @@ router.put('/:id', verifyAdmin, async (req, res) => {
   try {
     const db = getDatabase();
     const tableId = req.params.id;
+    const { tableNumber, capacity, location, isAvailable, description } = req.body;
+
+    // Validate required fields
+    if (tableNumber === undefined || capacity === undefined || !location) {
+      return res.status(400).json({ error: 'Thiếu các trường bắt buộc' });
+    }
+
     const updateData = {
-      ...req.body,
+      tableNumber: parseInt(tableNumber),
+      capacity: parseInt(capacity),
+      location,
+      isAvailable: isAvailable !== undefined ? isAvailable : true,
+      description: description || '',
       updatedAt: new Date()
     };
-
-    // Remove _id if present
-    delete updateData._id;
-    delete updateData.id;
 
     const result = await db.collection('tables').updateOne(
       { _id: new ObjectId(tableId) },
