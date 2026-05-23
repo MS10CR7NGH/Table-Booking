@@ -53,7 +53,7 @@ export default function BookingPage() {
     
     setIsCheckingAvailability(true);
     try {
-      const dateStr = date.toISOString().split('T')[0];
+      const dateStr = formatDateToString(date);
       const response = await fetch(
         buildApiUrl(`/availability/${dateStr}/${encodeURIComponent(time)}`)
       );
@@ -109,7 +109,7 @@ export default function BookingPage() {
             name,
             email,
             phone,
-            date: date.toISOString().split('T')[0],
+            date: formatDateToString(date),
             time,
             guests,
             diningPreference,
@@ -145,6 +145,13 @@ export default function BookingPage() {
       month: 'long', 
       day: 'numeric' 
     });
+  };
+
+  const formatDateToString = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   const downloadImage = async () => {
