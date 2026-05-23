@@ -1,4 +1,4 @@
-# Aura Dining – Restaurant Table Booking System
+# DinnerThings – Restaurant Table Booking System
 
 A restaurant table booking and management website: React + Vite frontend, Node.js/Express + MongoDB backend, with Vietnamese user interface.
 
@@ -162,7 +162,7 @@ After running `npm run seed`, the system creates a default admin account:
 | `/server` | `npm run indexes` | Create MongoDB indexes |
 
 ## 6. Email Confirmation
-The backend uses `nodemailer`. If SMTP is not configured, the system will still work but won't send emails. When all environment variables are properly configured (see backend section), each successful booking will send an "Aura Dining" confirmation email to the customer.
+The backend uses `nodemailer`. If SMTP is not configured, the system will still work but won't send emails. When all environment variables are properly configured (see backend section), each successful booking will send an "DinnerThings" confirmation email to the customer.
 
 ## 7. Suggested Roadmap
 - Upload official logo to `src/assets` and replace temporary icon.
@@ -209,4 +209,4 @@ If you encounter errors:
 5. Check environment variables in Vercel (for frontend).
 6. Delete `node_modules` and run `npm install` again if dependencies are missing (`nodemailer`, etc.).
 
-Good luck running Aura Dining! 🍽️🔥
+Good luck running DinnerThings! 🍽️🔥
